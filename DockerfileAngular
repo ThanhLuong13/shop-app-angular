@@ -12,7 +12,7 @@ COPY ./shopapp-angular/package-lock.json package-lock.json
 RUN npm install --frozen-lockfile
 
 # Copy the rest of the app's code excluding node_modules
-COPY ./shopapp-angular/ .
+COPY ./ .
 
 # Build Angular app in production mode
 RUN npm run build:production
