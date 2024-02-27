@@ -1,0 +1,37 @@
+version: "3.7"
+
+services:
+  shopapp-angular-container:
+    container_name: shopapp-angular-container
+    build:
+      context: .
+      dockerfile: DockerfileAngular
+    image: shopapp-angular:1.0.0
+    ports:
+      - "4301:80"
+    restart: always
+    networks:
+      - shopapp-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+networks:
+  shopapp-network:
+    driver: bridge
+#  docker-compose -f ./deployment.yml down
+
+#  docker-compose -f ./deployment.yml rm -s -f mysql8-container
+#  docker-compose -f ./deployment.yml up -d mysql8-container
+
+#  docker-compose -f ./deployment.yml rm -s -f phpmyadmin8-container
+#  docker-compose -f ./deployment.yml up -d phpmyadmin8-container
+
+#  docker-compose -f ./deployment.yml rm -s -f shopapp-spring-container
+#  docker-compose -f ./deployment.yml up -d shopapp-spring-container --build
+#  docker logs shopapp-spring-container
+
+#  docker-compose -f ./deployment.yml rm -s -f shopapp-angular-container
+#  docker-compose -f ./deployment.yml up -d shopapp-angular-container --build
+#  docker logs shopapp-angular-container
