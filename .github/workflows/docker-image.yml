@@ -7,7 +7,7 @@ on:
     branches: ["main"]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,3 +27,27 @@ jobs:
           docker-compose -f ./deployment.yml up -d --build shopapp-angular-container
           docker tag shopapp-angular:1.0.0 ${{ secrets.DOCKERHUB_USERNAME }}/shopapp-angular:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/shopapp-angular:latest
+
+  deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Connect to EC2
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          HOSTNAME: ${{secrets.SSH_HOST}}
+          USER_NAME: ${{secrets.USER_NAME}}
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key "${USER_NAME}@${HOSTNAME}" '
+
+            cd ./docker
+            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+            docker-compose -f ./deployment.yml rm -s -f shopapp-angular-container
+            docker rmi tonionn/shopapp-angular
+            docker pull tonionn/shopapp-angular:latest
+            docker-compose -f ./deployment.yml up -d shopapp-angular-container
+            '
