@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
   products: Product[] = [];
   categories: Category[] = [];
   currentPage: number = 1;
-  itemsPerPage: number = 9;
+  itemsPerPage: number = 12;
   pages: number[] = [];
   totalPages: number = 0;
   visiblePages: number[] = [];

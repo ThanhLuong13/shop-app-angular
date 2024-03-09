@@ -7,6 +7,7 @@ import { AdminComponent } from "./admin.component";
 import { FormsModule } from "@angular/forms";
 import { OrderDetailAdminComponent } from "./order-detail/order-detail.admin.component";
 import { RouterModule } from "@angular/router";
+import { UserAdminComponent } from "./user/user.admin.component";
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { RouterModule } from "@angular/router";
     AdminComponent,
     OrderAdminComponent,
     ProductAdminComponent,
-    OrderDetailAdminComponent
+    OrderDetailAdminComponent,
+    UserAdminComponent
   ],
   imports: [
     CommonModule,

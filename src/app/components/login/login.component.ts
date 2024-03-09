@@ -34,7 +34,7 @@ export class LoginComponent {
     console.log(this.phoneNumber);
   }
 
-  login() {
+  loginClick() {
     const loginData: LoginDto = {
       phone_number: this.phoneNumber,
       password: this.password
@@ -53,13 +53,13 @@ export class LoginComponent {
             }
             this.userService.saveUserToLocalStorage(this.userResponse)
             if (this.userResponse.role.id === 1 || this.userResponse.role.name === "Admin") {
-              this.router.navigate(['/admin'])
+              this.router.navigate(['/admin/orders'])
             } else {
               this.router.navigate(['/'])
             }
           }, complete: () => {
             this.cartService.refreshCart()
-            debugger
+
           },
           error: (error: any) => {
             alert(`Cannot login, error: ${error}`)

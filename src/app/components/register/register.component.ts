@@ -48,17 +48,15 @@ export class RegisterComponent {
     this.userService.register(registerData).subscribe({
       next: (response: any) => {
         debugger
-        if (response && (response.status === 200 || response.status === 201)) {
-          this.router.navigate(["/login"])
-        } else {
-
-        }
+        console.log(response);
+        alert("Đăng kí thành công")
+        this.router.navigate(["/login"])
       },
       complete: () => {
         debugger
       },
       error: (error: any) => {
-        alert(`Cannot register, error: ${error.error}`)
+        alert(`Cannot register, error: ${error.error.message}`)
       }
     })
 

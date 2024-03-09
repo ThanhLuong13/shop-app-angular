@@ -48,8 +48,8 @@ export class OrderComponent implements OnInit {
       phone_number: ['', [Validators.required, Validators.minLength(6)]],
       address: ['', [Validators.required]],
       note: [''],
-      shipping_method: ['Express'],
-      payment_method: ['COD']
+      shipping_method: ['Express', [Validators.required]],
+      payment_method: ['COD', [Validators.required]]
     });
   }
 
@@ -88,6 +88,7 @@ export class OrderComponent implements OnInit {
   }
 
   caculateTotalPrice(): void {
+    debugger
     this.totalAmount = this.cartItems.reduce(
       (total, item) => total + item.product.price * item.quantity
       , 0)
@@ -101,6 +102,7 @@ export class OrderComponent implements OnInit {
       this.orderData.phone_number = this.orderForm.get('phone_number')!.value;
       this.orderData.address = this.orderForm.get('address')!.value;
       this.orderData.note = this.orderForm.get('note')!.value;
+      this.orderData.payment_method = this.orderForm.get('payment_method')!.value;
       this.orderData.shipping_method = this.orderForm.get('shipping_method')!.value;
       this.orderData.shipping_address = this.orderForm.get('address')!.value;
     }
@@ -129,17 +131,35 @@ export class OrderComponent implements OnInit {
   applyCoupon() { }
 
   confirmDelete(index: number) {
+    debugger
     if (confirm("Ban muon xoa san pham nay khoi gio hang?")) {
-      this.cartItems.slice(index, 1)
+      this.cartItems.splice(index, 1)
+      console.log(this.cartItems);
+
+      this.updateCart()
       this.caculateTotalPrice()
     }
   }
 
   private updateCart() {
+    debugger
     this.cart.clear()
     this.cartItems.forEach(cartItem => {
       this.cart.set(cartItem.product.id, cartItem.quantity)
     })
     this.cartService.setCart(this.cart);
+  }
+  inscreaseQuantity(index: number): void {
+    this.cartItems[index].quantity++
+    this.updateCart()
+    this.caculateTotalPrice()
+  }
+
+  desreaseQuantity(index: number): void {
+    if (this.cartItems[index].quantity > 1) {
+      this.cartItems[index].quantity--
+      this.updateCart()
+      this.caculateTotalPrice()
+    }
   }
 }

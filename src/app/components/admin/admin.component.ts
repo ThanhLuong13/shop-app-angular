@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-admin',
@@ -7,11 +8,14 @@ import { Router } from "@angular/router";
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
-  adminComponent: string = 'orders'
+  adminComponent: string = ''
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private location: Location) { }
 
   ngOnInit(): void {
+    const currentUrl = this.location.path();
+    const adminComponent = currentUrl.split('/').pop();
+    this.adminComponent = adminComponent!
   }
 
   showAdmincomponent(component: string): void {

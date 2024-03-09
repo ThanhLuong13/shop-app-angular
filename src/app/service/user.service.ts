@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { RegisterDTO } from '../DTO/users/registerDto';
 import { LoginDto } from '../DTO/users/loginDto';
 import { UserResponse } from '../responses/user/userResponse';
 import { UpdateUserDto } from '../DTO/users/updateUserDto';
 import { environment } from 'src/environments/environment';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ import { environment } from 'src/environments/environment';
 export class UserService {
   private apiRegister = `${environment.apiBaseUrl}/users/register`
   private apiLogin = `${environment.apiBaseUrl}/users/login`
+  private apiGetUsers = `${environment.apiBaseUrl}/users`
   private apiUserDetail = `${environment.apiBaseUrl}/users/detail`
   private apiConfig = {
     headers: this.createHeader()
@@ -82,6 +84,14 @@ export class UserService {
         Authorization: `Bearer ${token}`
       })
     })
+  }
+
+  getUsers(keyword: string, page: number, limit: number): Observable<any> {
+    let params = new HttpParams();
+    params = params.set('page', page.toString());
+    params = params.set('limit', limit.toString());
+    params = params.set('keyword', keyword);
+    return this.http.get<User[]>(this.apiGetUsers, { params });
   }
 }
 

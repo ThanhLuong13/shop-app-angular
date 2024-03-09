@@ -12,18 +12,25 @@ import { UserResponse } from '../responses/user/userResponse';
 })
 export class CartService {
   private cart: Map<number, number> = new Map<number, number>()
-  constructor(private productService: ProductService, private tokenService: TokenService) { }
-
+  constructor(private productService: ProductService, private tokenService: TokenService) {
+    debugger
+    this.refreshCart()
+  }
 
   getCartKey(): string {
     const userJson = localStorage.getItem('user');
-    const user: UserResponse = JSON.parse(userJson!);
-    return `cart_${user.id}`
+    if (userJson) {
+      const user: UserResponse = JSON.parse(userJson);
+      return `cart_${user.id}`
+    } else {
+      return '';
+    }
   }
 
   refreshCart(): void {
+    debugger
     const storedCart = localStorage.getItem(this.getCartKey())
-    if (storedCart) {
+    if (storedCart != null) {
       this.cart = new Map(JSON.parse(storedCart))
     } else {
       this.cart = new Map<number, number>();
@@ -41,6 +48,7 @@ export class CartService {
   }
 
   getCart(): Map<number, number> {
+    debugger
     if (this.cart) {
       return this.cart;
     }
