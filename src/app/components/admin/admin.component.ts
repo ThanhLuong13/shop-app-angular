@@ -18,6 +18,10 @@ export class AdminComponent implements OnInit {
     this.adminComponent = adminComponent!
   }
 
+  adminPage(): void {
+    this.router.navigate(['/admin'])
+  }
+
   showAdmincomponent(component: string): void {
     this.adminComponent = component;
     this.router.navigate([`/admin/${component}`]);
